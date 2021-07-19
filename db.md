@@ -4,40 +4,41 @@
     (
     user_id integer primary key, 
     user_name string not null, 
-    user_address string, 
-    user_contact_number integer
+    user_address json, 
+    user_contact_number string,
+    created_at timestampz not null default current_timestamp,
+    updated_at timestampz
     )
 
 ### accounts 
     (
-    acc_number integer primary_key, 
-    acc_type string not null, 
-    acc_balance real not null check(>=0), 
+    acc_id serial primary_key,
+    acc_number integer unique, 
+    acc_type enum not null, 
+    acc_balance real not null check(acc_balance>=0) default 0, 
+    created_at timestampz not null default current_timestamp,
+    updated_at timestampz
     )
 
-### acc_holder (
-    user_id integer,
-    acc_number interger,
-    primary key(user_id, acc_number) 
-    )
-
-### loan 
+### acc_holder 
     (
-    loan_number integer primary_key, 
-    load_type string not null,
-    loan_amount real not null check(>=0), 
-    loan_balance real not null check(>=0), 
-    user_id integer not null references users(user_id)
+    user_id integer not null,
+    acc_id interger not null,
+    primary key(user_id, acc_number),
+    foreign key(user_id) references users on delete cascade, 
+    foreign key(acc_id) references accounts on delete cascade, 
     )
 
 ### transactions 
     (
     transac_id integer primary_key, 
-    transac_type string not null, 
-    transac_amount real not null check(>=0), 
-    transac_date date not null,
-    user_id integer not null references users(user_id),
+    user_id integer not null,
     beneficiary_id integer not null, 
+    transac_type enum not null, 
+    transac_amount real not null check(trasac_amount>=0), 
+    transac_datetime timestampz not null default current_timestamp,
+    foreign key(user_id) references users,
+    foreign key(beneficiary_id) references users,
     )
 
 ## Domain
@@ -45,5 +46,3 @@
     - ("saving","salary,","joint")
 **transac_type**
     - ("debit","credit")
-**loan_type domain** 
-    - ("home","education","car")
