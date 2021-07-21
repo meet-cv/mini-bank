@@ -35,7 +35,7 @@ func main() {
 		transaction := user.Group("/transaction")
 		{
 			transaction.POST("/info", TransactionInfo)
-			//transaction.POST("/execute", TrasactionExecute)
+			transaction.POST("/execute", TransactionExecute)
 			transaction.POST("/all", TransactionAll)
 		}
 	}
@@ -65,4 +65,7 @@ func TransactionInfo(c *gin.Context) {
 }
 func TransactionAll(c *gin.Context) {
 	services.TransactionAll(db, c)
+}
+func TransactionExecute(c *gin.Context) {
+	services.TransactionExecute(db, c)
 }

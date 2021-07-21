@@ -54,7 +54,13 @@ func DB_create(db *pg.DB) error {
 	return nil
 }
 
-func ErrorResponse(c *gin.Context, err error) {
-	log.Printf("%v", err.Error())
-	c.String(400, "some error occured")
+func ErrorResponse(c *gin.Context, err error) bool {
+	if err != nil {
+		log.Printf("%v", err.Error())
+		var res = make(map[string]string)
+		res["message"] = "some error occured"
+		c.JSON(400, res)
+		return true
+	}
+	return false
 }
