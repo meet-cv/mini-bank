@@ -42,7 +42,5 @@
     )
 
 ## Domain
-**acc_type** 
-    - ("saving","salary,","joint")
-**transac_type**
-    - ("debit","credit")
+create type acc_type as ENUM('saving','joint','salary');
+create type transac_type as ENUM('debit','credit');
